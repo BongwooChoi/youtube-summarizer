@@ -1,4 +1,3 @@
-ffmpeg
 streamlit
 yt-dlp
 openai-whisper

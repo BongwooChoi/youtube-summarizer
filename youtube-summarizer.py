@@ -7,9 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1bUyLCUoZN5edvEWONVaF3nUvG14z7yP7
 """
 
-# !apt update
-# !apt install ffmpeg
-
 # 필요한 라이브러리 설치
 # !pip install streamlit yt-dlp openai-whisper openai langchain langchain_community
 
@@ -49,13 +46,10 @@ if st.button("영상 요약하기"):
             # 1. YouTube 영상 다운로드
             status_text.text("YouTube 영상 다운로드 중...")
             ydl_opts = {
-                'format': 'bestaudio/best',
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'outtmpl': 'audio.%(ext)s'
+                        'format': 'bestaudio/best',
+                        'outtmpl': '%(id)s.%(ext)s',
+                        'noplaylist': True,
+                        'quiet': True,
             }
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([youtube_url])

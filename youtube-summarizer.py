@@ -7,53 +7,86 @@ Original file is located at
     https://colab.research.google.com/drive/1bUyLCUoZN5edvEWONVaF3nUvG14z7yP7
 """
 
-#!pip install streamlit yt-dlp openai-whisper openai langchain langchain_community
+!pip install ffmpeg-python streamlit yt-dlp openai-whisper openai langchain langchain_community
 
-import os
-os.environ["OPENAI_API_KEY"] = "sk-proj-2HuRIDeSyU3b4BwNGQj9T3BlbkFJRdd0oQDbQSwmWctcuhbs"
-
+import ffmpeg
 import streamlit as st
-from langchain.document_loaders import YoutubeLoader
-from langchain.chains.summarize import load_summarize_chain
-from langchain.llms import OpenAI
-import whisper
 import yt_dlp
+import whisper
+import openai
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage, SystemMessage
+import os
 
-# --- UI 디자인 ---
-st.title("YouTube 영상 요약 AI 서비스")
-st.subheader("영상 URL을 입력하여 요약된 보고서를 받아보세요!")
+# Streamlit 앱 제목 설정
+st.set_page_config(page_title="YouTube 영상 요약 서비스", page_icon="📺")
 
-# --- YouTube 영상 URL 입력 ---
-video_url = st.text_input("YouTube 영상 URL 입력:")
+# 제목과 부제목
+st.title("YouTube 영상 요약 서비스")
+st.subheader("AI를 활용한 영상 내용 요약 보고서")
 
-if video_url:
-    # --- 진행 상태 표시 ---
-    with st.spinner("영상 다운로드 및 음성 인식 중..."):
-        ydl_opts = {
-            'format': 'bestaudio[ext=m4a]/best',  # m4a 형식으로 다운로드 (Whisper가 지원하는 형식)
-            'outtmpl': '%(id)s.%(ext)s',
-        }
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(video_url, download=False)
-            video_id = info_dict.get("id", None)
-            video_title = info_dict.get('title', None)
-            ydl.download([video_url])
+# OpenAI API 키 입력
+openai_api_key = st.text_input("OpenAI API 키를 입력하세요:", type="password")
+os.environ["OPENAI_API_KEY"] = openai_api_key
 
-        audio_file = video_id + ".m4a"
-        model = whisper.load_model("base")
-        result = model.transcribe(audio_file)
-        transcript = result["text"]
+# YouTube URL 입력
+youtube_url = st.text_input("YouTube 영상 URL을 입력하세요:")
 
-    # --- 텍스트 요약 ---
-    with st.spinner("텍스트 요약 중..."):
-        from langchain_community.document_loaders import YoutubeLoader
-        from langchain_community.llms import OpenAI
+if st.button("영상 요약하기"):
+    if not openai_api_key:
+        st.error("OpenAI API 키를 입력해주세요.")
+    elif not youtube_url:
+        st.error("YouTube 영상 URL을 입력해주세요.")
+    else:
+        try:
+            # 진행 상태 표시
+            progress_bar = st.progress(0)
+            status_text = st.empty()
 
-        loader = YoutubeLoader.from_youtube_url(video_url, add_video_info=True)
-        docs = loader.load()
-        chain = load_summarize_chain(OpenAI(temperature=0, model_name="gpt-4-1106-preview"), chain_type="map_reduce")
-        summary = chain.run(docs)
+            # 1. YouTube 영상 다운로드
+            status_text.text("YouTube 영상 다운로드 중...")
+            ydl_opts = {
+                'format': 'bestaudio/best',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
+                'outtmpl': 'audio.%(ext)s'
+            }
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([youtube_url])
+            progress_bar.progress(25)
 
-    # --- 결과 출력 ---
-    st.subheader(f"[{video_title}] 요약 결과")
-    st.write(summary)
+            # 2. 음성 인식 (Whisper)
+            status_text.text("음성을 텍스트로 변환 중...")
+            model = whisper.load_model("base")
+            result = model.transcribe("audio.mp3")
+            transcription = result["text"]
+            progress_bar.progress(50)
+
+            # 3. 텍스트 요약 (GPT-4)
+            status_text.text("텍스트 요약 중...")
+            chat = ChatOpenAI(model_name="gpt-4", temperature=0)
+            messages = [
+                SystemMessage(content="You are a helpful assistant that summarizes YouTube video transcripts."),
+                HumanMessage(content=f"Please summarize the following transcript in a detailed report format:\n\n{transcription}")
+            ]
+            summary = chat(messages).content
+            progress_bar.progress(75)
+
+            # 4. 결과 표시
+            status_text.text("요약 완료!")
+            st.subheader("영상 요약 결과")
+            st.write(summary)
+            progress_bar.progress(100)
+
+        except Exception as e:
+            st.error(f"오류가 발생했습니다: {str(e)}")
+
+# 주의사항 및 안내
+st.markdown("---")
+st.markdown("**주의사항:**")
+st.markdown("- 이 서비스는 OpenAI API를 사용하므로 API 사용량에 따라 비용이 발생할 수 있습니다.")
+st.markdown("- 영상의 길이와 복잡도에 따라 처리 시간이 달라질 수 있습니다.")
+st.markdown("- 저작권 보호를 위해 개인적인 용도로만 사용해주세요.")

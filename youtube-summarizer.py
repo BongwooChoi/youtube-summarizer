@@ -7,6 +7,9 @@ Original file is located at
     https://colab.research.google.com/drive/1bUyLCUoZN5edvEWONVaF3nUvG14z7yP7
 """
 
+# !apt update
+# !apt install ffmpeg
+
 # 필요한 라이브러리 설치
 # !pip install streamlit yt-dlp openai-whisper openai langchain langchain_community
 

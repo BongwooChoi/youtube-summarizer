@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1bUyLCUoZN5edvEWONVaF3nUvG14z7yP7
 """
 
-!pip install ffmpeg-python streamlit yt-dlp openai-whisper openai langchain langchain_community
+#!pip install ffmpeg-python streamlit yt-dlp openai-whisper openai langchain langchain_community
 
 import ffmpeg
 import streamlit as st

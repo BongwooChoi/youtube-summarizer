@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1bUyLCUoZN5edvEWONVaF3nUvG14z7yP7
 """
 
-#!pip install ffmpeg-python streamlit yt-dlp openai-whisper openai langchain langchain_community
+!pip install ffmpeg-python streamlit yt-dlp openai-whisper openai langchain langchain_community
 
 import ffmpeg
 import streamlit as st
@@ -23,7 +23,7 @@ st.set_page_config(page_title="YouTube 영상 요약 서비스", page_icon="📺
 
 # 제목과 부제목
 st.title("YouTube 영상 요약 서비스")
-st.subheader("AI를 활용한 영상 내용 요약 보고서")
+st.subheader("바쁘다 바빠 현대사회 당신의 시간을 절약해 드립니다.")
 
 # OpenAI API 키 입력
 openai_api_key = st.text_input("OpenAI API 키를 입력하세요:", type="password")
@@ -70,7 +70,7 @@ if st.button("영상 요약하기"):
             chat = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
             messages = [
                 SystemMessage(content="You are a helpful assistant that summarizes YouTube video transcripts."),
-                HumanMessage(content=f"Please summarize the following transcript in a detailed report format:\n\n{transcription}")
+                HumanMessage(content=f"아래 내용을 서론, 본론, 결론의 형태로 요약하세요. 한 페이지 이내로 요약하세요.한국어로 요약하세요.:\n\n{transcription}")
             ]
             summary = chat(messages).content
             progress_bar.progress(75)

@@ -26,14 +26,14 @@ st.title("YouTube 영상 요약 서비스")
 st.subheader("AI를 활용한 영상 내용 요약 보고서")
 
 # OpenAI API 키 입력
-OPENAI_API_KEY = "sk-blijhq4lKLLRoKZgHxmXBUSzB-vPt-eC2Nh7cUJg27T3BlbkFJiU2djDjtI50r-RvmUn6YJRB0keWSzP-IWKw9CYDJ0A"
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+openai_api_key = st.text_input("OpenAI API 키를 입력하세요:", type="password")
+os.environ["OPENAI_API_KEY"] = openai_api_key
 
 # YouTube URL 입력
 youtube_url = st.text_input("YouTube 영상 URL을 입력하세요:")
 
 if st.button("영상 요약하기"):
-    if not OPENAI_API_KEY:
+    if not openai_api_key:
         st.error("OpenAI API 키를 입력해주세요.")
     elif not youtube_url:
         st.error("YouTube 영상 URL을 입력해주세요.")
@@ -87,5 +87,6 @@ if st.button("영상 요약하기"):
 # 주의사항 및 안내
 st.markdown("---")
 st.markdown("**주의사항:**")
+st.markdown("- 이 서비스는 OpenAI API를 사용하므로 API 사용량에 따라 비용이 발생할 수 있습니다.")
 st.markdown("- 영상의 길이와 복잡도에 따라 처리 시간이 달라질 수 있습니다.")
 st.markdown("- 저작권 보호를 위해 개인적인 용도로만 사용해주세요.")

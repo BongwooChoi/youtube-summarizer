@@ -69,8 +69,8 @@ if st.button("영상 요약하기"):
             status_text.text("텍스트 요약 중...")
             chat = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
             messages = [
-                SystemMessage(content="You are a helpful assistant that summarizes YouTube video transcripts."),
-                HumanMessage(content=f"아래 내용을 서론, 본론, 결론의 형태로 요약하세요. 한 페이지 이내로 요약하세요.한국어로 요약하세요.:\n\n{transcription}")
+                SystemMessage(content="당신은 나 대신 YouTube를 시청하고 내용을 정리해서 알려주는 Assistant입니다."),
+                HumanMessage(content=f"아래 내용을 가독성 있는 한 페이지 보고서 형태로 요약하세요.:\n\n{transcription}")
             ]
             summary = chat(messages).content
             progress_bar.progress(75)

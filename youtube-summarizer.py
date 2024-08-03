@@ -19,10 +19,6 @@ from langchain.llms import OpenAI
 import whisper
 import yt_dlp
 
-# --- FFmpeg 설치 ---
-!sudo apt install ffmpeg -y
-
-
 # --- UI 디자인 ---
 st.title("YouTube 영상 요약 AI 서비스")
 st.subheader("영상 URL을 입력하여 요약된 보고서를 받아보세요!")
@@ -34,7 +30,7 @@ if video_url:
     # --- 진행 상태 표시 ---
     with st.spinner("영상 다운로드 및 음성 인식 중..."):
         ydl_opts = {
-            'format': 'bestaudio/best',
+            'format': 'bestaudio[ext=m4a]/best',  # m4a 형식으로 다운로드 (Whisper가 지원하는 형식)
             'outtmpl': '%(id)s.%(ext)s',
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -43,8 +39,8 @@ if video_url:
             video_title = info_dict.get('title', None)
             ydl.download([video_url])
 
-        audio_file = video_id + ".webm"  # 오디오 파일 경로
-        model = whisper.load_model("base")  # Whisper 모델 로드
+        audio_file = video_id + ".m4a"
+        model = whisper.load_model("base")
         result = model.transcribe(audio_file)
         transcript = result["text"]
 
@@ -52,6 +48,7 @@ if video_url:
     with st.spinner("텍스트 요약 중..."):
         from langchain_community.document_loaders import YoutubeLoader
         from langchain_community.llms import OpenAI
+
         loader = YoutubeLoader.from_youtube_url(video_url, add_video_info=True)
         docs = loader.load()
         chain = load_summarize_chain(OpenAI(temperature=0, model_name="gpt-4-1106-preview"), chain_type="map_reduce")

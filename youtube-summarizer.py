@@ -26,14 +26,14 @@ st.title("YouTube 영상 요약 서비스")
 st.subheader("AI를 활용한 영상 내용 요약 보고서")
 
 # OpenAI API 키 입력
-openai_api_key = st.text_input("OpenAI API 키를 입력하세요:", type="password")
-os.environ["OPENAI_API_KEY"] = openai_api_key
+OPENAI_API_KEY = "sk-proj-2HuRIDeSyU3b4BwNGQj9T3BlbkFJRdd0oQDbQSwmWctcuhbs"
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # YouTube URL 입력
 youtube_url = st.text_input("YouTube 영상 URL을 입력하세요:")
 
 if st.button("영상 요약하기"):
-    if not openai_api_key:
+    if not OPENAI_API_KEY:
         st.error("OpenAI API 키를 입력해주세요.")
     elif not youtube_url:
         st.error("YouTube 영상 URL을 입력해주세요.")
@@ -67,7 +67,7 @@ if st.button("영상 요약하기"):
 
             # 3. 텍스트 요약 (GPT-4)
             status_text.text("텍스트 요약 중...")
-            chat = ChatOpenAI(model_name="gpt-4", temperature=0)
+            chat = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
             messages = [
                 SystemMessage(content="You are a helpful assistant that summarizes YouTube video transcripts."),
                 HumanMessage(content=f"Please summarize the following transcript in a detailed report format:\n\n{transcription}")

@@ -22,8 +22,8 @@ import os
 st.set_page_config(page_title="YouTube 영상 요약 서비스", page_icon="📺")
 
 # 제목과 부제목
-st.title("YouTube 영상 요약 서비스")
-st.subheader("바쁘다 바빠 현대사회 당신의 시간을 절약해 드립니다.")
+st.title("YouTube 영상 요약봇")
+st.subheader("바쁜 현대인, 당신의 시간을 절약해 드립니다.")
 
 # OpenAI API 키 입력
 openai_api_key = st.text_input("OpenAI API 키를 입력하세요:", type="password")

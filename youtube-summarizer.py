@@ -60,7 +60,7 @@ if st.button("영상 요약하기"):
 
             # 2. 음성 인식 (Whisper)
             status_text.text("음성을 텍스트로 변환 중...")
-            model = whisper.load_model("base")
+            model = whisper.load_model("small")
             result = model.transcribe("audio.mp3")
             transcription = result["text"]
             progress_bar.progress(50)

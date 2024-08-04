@@ -25,8 +25,14 @@ st.set_page_config(page_title="YouTube 영상 요약 서비스", page_icon="📺
 st.title("YouTube 영상 요약봇")
 st.subheader("바쁜 현대인, 당신의 시간을 절약해 드립니다.")
 
+'''
 # OpenAI API 키 입력
 openai_api_key = st.text_input("OpenAI API 키를 입력하세요:", type="password")
+os.environ["OPENAI_API_KEY"] = openai_api_key
+'''
+
+# OpenAI API 키 가져오기
+openai_api_key = st.secrets["openai_api_key"]
 os.environ["OPENAI_API_KEY"] = openai_api_key
 
 # YouTube URL 입력

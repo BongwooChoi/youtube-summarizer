@@ -87,6 +87,6 @@ if st.button("영상 요약하기"):
 # 주의사항 및 안내
 st.markdown("---")
 st.markdown("**안내사항:**")
-st.markdown("- 이 서비스는 OpenAI의 Whisper 모델(음성인식)과 GPT-4o-mini(텍스트 요약)를 사용합니다.")
+st.markdown("- 이 서비스는 OpenAI의 Whisper(텍스트 변환)와 GPT-4o-mini(텍스트 요약)를 사용합니다.")
 st.markdown("- 영상의 길이와 복잡도에 따라 처리 시간이 달라질 수 있습니다.")
 st.markdown("- 저작권 보호를 위해 개인적인 용도로만 사용해주세요.")

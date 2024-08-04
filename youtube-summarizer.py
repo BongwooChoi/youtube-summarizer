@@ -60,7 +60,7 @@ if st.button("영상 요약하기"):
 
             # 2. 음성 인식 (Whisper)
             status_text.text("음성을 텍스트로 변환 중...")
-            model = whisper.load_model("small")
+            model = whisper.load_model("tiny")
             result = model.transcribe("audio.mp3")
             transcription = result["text"]
             progress_bar.progress(50)
@@ -88,5 +88,6 @@ if st.button("영상 요약하기"):
 st.markdown("---")
 st.markdown("**주의사항:**")
 st.markdown("- 이 서비스는 OpenAI API를 사용하므로 API 사용량에 따라 비용이 발생할 수 있습니다.")
+st.markdown("- 음성 → 텍스트 변환은 Whisper tiny, 텍스트 요약은 GPT-4o-mini를 사용합니다.")
 st.markdown("- 영상의 길이와 복잡도에 따라 처리 시간이 달라질 수 있습니다.")
 st.markdown("- 저작권 보호를 위해 개인적인 용도로만 사용해주세요.")

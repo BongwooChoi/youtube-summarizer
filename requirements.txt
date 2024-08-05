@@ -5,3 +5,4 @@ openai-whisper
 openai
 langchain
 langchain_community
+youtube-transcript-api

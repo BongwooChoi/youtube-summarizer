@@ -10,7 +10,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 
 # Streamlit 앱 제목 설정
 st.set_page_config(page_title="YouTube 영상 요약 서비스", page_icon="📺")
-st.title("YouTube 영상 요약봇")
+st.title("📺 YouTube 영상 요약봇")
 st.subheader("바쁜 현대인, 당신의 시간을 절약해 드립니다.")
 
 # OpenAI API 키 가져오기

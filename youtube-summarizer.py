@@ -47,14 +47,14 @@ def transcribe_audio(url):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        'outtmpl': 'audio.%(ext)s'
+        'outtmpl': 'audio.%(ext)s',
         'ignoreerrors': True,
         'no_warnings': True,
         'nocheckcertificate': True,
         'quiet': True,
         'no_color': True,
         'cachedir': False,
-        'extractor_retries': 5,
+        'extractor_retries': 5
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
